@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FADE Score Summary</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .formula-section {
+            background: #f8f9fa;
+            border-left: 5px solid #667eea;
+            padding: 30px;
+            margin-bottom: 40px;
+            border-radius: 10px;
+        }
+        
+        .formula-title {
+            font-size: 1.5em;
+            color: #667eea;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        
+        .formula {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            font-size: 1.3em;
+            text-align: center;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            font-family: 'Courier New', monospace;
+        }
+        
+        .fraction {
+            display: inline-block;
+            vertical-align: middle;
+            text-align: center;
+        }
+        
+        .numerator, .denominator {
+            display: block;
+            padding: 5px 10px;
+        }
+        
+        .numerator {
+            border-bottom: 2px solid #333;
+            margin-bottom: 5px;
+        }
+        
+        .calculation-box {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .calc-step {
+            margin: 10px 0;
+            font-size: 1.1em;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .result-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .result-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .result-card h3 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+            padding-bottom: 10px;
+        }
+        
+        .metric {
+            margin: 15px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .metric-label {
+            font-size: 1em;
+            opacity: 0.9;
+        }
+        
+        .metric-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            background: rgba(255,255,255,0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+        
+        .improvement {
+            background: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            margin-top: 15px;
+            text-align: center;
+            font-size: 1.1em;
+        }
+        
+        .highlight {
+            background: #ffc107;
+            color: #333;
+            padding: 2px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .insights {
+            background: #e7f3ff;
+            border-left: 5px solid #2196F3;
+            padding: 30px;
+            margin-top: 40px;
+            border-radius: 10px;
+        }
+        
+        .insights h3 {
+            color: #2196F3;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+        
+        .insights ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .insights li {
+            padding: 10px 0;
+            font-size: 1.1em;
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .insights li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #28a745;
+            font-weight: bold;
+            font-size: 1.3em;
+        }
+        
+        .winner {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 FADE Score Analysis</h1>
+            <p>Weighted Average Results across 4,233 Images</p>
+        </div>
+        
+        <div class="content">
+            <!-- Formula Section -->
+            <div class="formula-section">
+                <div class="formula-title">Weighted Average Formula</div>
+                <div class="formula">
+                    <div class="fraction">
+                        <span class="numerator">Σ (FADE Score × Number of Images)</span>
+                        <span class="denominator">Σ (Number of Images)</span>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin: 20px 0; font-size: 1.2em; color: #666;">
+                    Total Images: 1000 + 500 + 583 + 650 + 1000 + 500 = <span class="highlight">4,233</span>
+                </div>
+            </div>
+            
+            <!-- Example Calculation -->
+            <div class="formula-section">
+                <div class="formula-title">Example: Pipeline 1 - Original Hazy Images</div>
+                <div class="calculation-box">
+                    <div class="calc-step"><strong>Step 1:</strong> Multiply each FADE score by number of images</div>
+                    <div class="calc-step">
+                        (1.2947 × 1000) + (1.1686 × 500) + (1.2874 × 583) + 
+                        (1.1998 × 650) + (1.3341 × 1000) + (1.1846 × 500)
+                    </div>
+                    <div class="calc-step">
+                        = 1294.7 + 584.3 + 750.55 + 779.87 + 1334.1 + 592.3
+                    </div>
+                    <div class="calc-step">
+                        = <span class="highlight">5335.82</span>
+                    </div>
+                    
+                    <div class="calc-step" style="margin-top: 20px;"><strong>Step 2:</strong> Divide by total images</div>
+                    <div class="calc-step">
+                        5335.82 ÷ 4233 = <span class="highlight">1.2606</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Results Grid -->
+            <div class="results-grid">
+                <div class="result-card">
+                    <h3>Pipeline 1: DehazeFormer Alone</h3>
+                    <div class="metric">
+                        <span class="metric-label">Original Hazy</span>
+                        <span class="metric-value">1.2606</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">After Dehazing</span>
+                        <span class="metric-value">0.8827</span>
+                    </div>
+                    <div class="improvement">
+                        ↓ 0.3779 (30.0% reduction)
+                    </div>
+                </div>
+                
+                <div class="result-card winner">
+                    <h3>Pipeline 2: Pre-proc + DehazeFormer 🏆</h3>
+                    <div class="metric">
+                        <span class="metric-label">Pre-processed</span>
+                        <span class="metric-value">0.9390</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Final Result</span>
+                        <span class="metric-value">0.6882</span>
+                    </div>
+                    <div class="improvement">
+                        ↓ 0.2508 (26.7% reduction)
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Key Insights -->
+            <div class="insights">
+                <h3>🔍 Key Insights</h3>
+                <ul>
+                    <li><strong>Pipeline 2 achieves the best final quality</strong> with the lowest FADE score of 0.6882</li>
+                    <li><strong>Pipeline 1 shows larger improvement</strong> (0.3779) but starts from a worse baseline</li>
+                    <li><strong>Pre-processing reduces initial haze</strong> from 1.2606 → 0.9390 before dehazing</li>
+                    <li><strong>Combined approach wins</strong> for clearest final images despite smaller delta</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
